@@ -1,0 +1,1092 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>훈련생 교육과정</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans+KR:wght@400;500;600;700&display=swap">
+<style>
+  :root{
+    --bg:#0D1219; --surface:#151D28; --raised:#1B2533; --line:#27313F;
+    --ink:#E7EDF5; --muted:#8D9BAD;
+    --accent:#E0A340; --accent-ink:#1A1206; --accent-soft:#2A2113;
+    --navy:#2F4C7A; --navy-soft:#16233A;
+    --ok:#46B07C; --ok-soft:#122A20;
+    --bad:#E0645C; --bad-soft:#2C1917;
+    --shadow:0 1px 2px rgba(0,0,0,.4), 0 18px 44px rgba(0,0,0,.45);
+  }
+  @media (prefers-color-scheme: light){
+    :root:not([data-theme="dark"]){
+      --bg:#EAEEF3; --surface:#FFFFFF; --raised:#F4F7FA; --line:#D7DFE9;
+      --ink:#0F1821; --muted:#5A6675;
+      --accent:#8F5D12; --accent-ink:#FFFFFF; --accent-soft:#FBF1DF;
+      --navy:#1F3352; --navy-soft:#E9EFF7;
+      --ok:#1B7A4C; --ok-soft:#E8F5EE; --bad:#B0342E; --bad-soft:#FBEAE8;
+      --shadow:0 1px 2px rgba(15,24,33,.05), 0 14px 36px rgba(15,24,33,.10);
+    }
+  }
+  :root[data-theme="light"]{
+    --bg:#EAEEF3; --surface:#FFFFFF; --raised:#F4F7FA; --line:#D7DFE9;
+    --ink:#0F1821; --muted:#5A6675;
+    --accent:#8F5D12; --accent-ink:#FFFFFF; --accent-soft:#FBF1DF;
+    --navy:#1F3352; --navy-soft:#E9EFF7;
+    --ok:#1B7A4C; --ok-soft:#E8F5EE; --bad:#B0342E; --bad-soft:#FBEAE8;
+    --shadow:0 1px 2px rgba(15,24,33,.05), 0 14px 36px rgba(15,24,33,.10);
+  }
+
+  *{box-sizing:border-box}
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font-family:"IBM Plex Sans KR","Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+    -webkit-font-smoothing:antialiased; font-size:16px; line-height:1.65;
+  }
+  .mono{font-family:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;font-variant-numeric:tabular-nums}
+  button{font-family:inherit;cursor:pointer;border-radius:9px;border:1px solid var(--line);
+         background:var(--raised);color:var(--ink);transition:background .13s,border-color .13s,color .13s}
+  button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+  .btn{padding:11px 20px;font-size:14.5px;font-weight:600}
+  .btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+  .btn.primary:hover{filter:brightness(1.08)}
+  .btn.ghost:hover{border-color:var(--accent);color:var(--accent)}
+  .btn:disabled{opacity:.35;cursor:not-allowed}
+  a{color:var(--accent)}
+
+  /* ── 표지 ── */
+  #cover{min-height:100vh;display:flex;flex-direction:column;justify-content:center;gap:30px;
+         max-width:880px;margin:0 auto;padding:48px 24px}
+  #cover.off{display:none}
+  .crest{display:inline-flex;align-items:center;gap:9px;font-size:12.5px;letter-spacing:.16em;color:var(--accent);font-weight:600}
+  .crest i{display:block;width:26px;height:2px;background:var(--accent);font-style:normal}
+  #cover h1{margin:0;font-size:clamp(40px,8.5vw,76px);font-weight:700;letter-spacing:-.03em;line-height:1.03;text-wrap:balance}
+  #cover .sub{font-size:17.5px;color:var(--muted);max-width:54ch;margin:0}
+  .path{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:22px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+  .path .st{padding:7px 15px;border-radius:999px;border:1px solid var(--line);background:var(--surface);font-size:14px}
+  .path .st.on{background:var(--accent);border-color:var(--accent);color:var(--accent-ink);font-weight:600}
+  .path .ar{color:var(--muted)}
+  .byline{font-size:13.5px;color:var(--muted)}
+  .byline b{color:var(--ink);font-weight:600}
+
+  /* ── 레이아웃 ── */
+  #app{display:none;grid-template-columns:250px 1fr;min-height:100vh}
+  #app.on{display:grid}
+  @media (max-width:940px){#app.on{grid-template-columns:1fr}}
+
+  .rail{
+    border-right:1px solid var(--line);background:var(--surface);
+    padding:20px 14px;position:sticky;top:0;height:100vh;overflow-y:auto;
+  }
+  @media (max-width:940px){.rail{position:static;height:auto;border-right:0;border-bottom:1px solid var(--line)}}
+  .rail h2{font-size:11px;letter-spacing:.14em;color:var(--muted);margin:0 0 14px;text-transform:uppercase}
+  .toc{display:flex;flex-direction:column;gap:2px}
+  .toc button{
+    text-align:left;padding:8px 11px;font-size:13.5px;background:transparent;border:0;border-radius:8px;
+    color:var(--muted);display:flex;gap:9px;align-items:baseline;line-height:1.35
+  }
+  .toc button:hover{background:var(--raised);color:var(--ink)}
+  .toc button.on{background:var(--accent-soft);color:var(--accent);font-weight:600}
+  .toc button .n{font-size:11px;opacity:.75;min-width:16px;font-family:"IBM Plex Mono",monospace}
+  .rail .home{margin-top:16px;width:100%;font-size:12.5px;padding:8px}
+
+  .main{padding:34px 40px 90px;max-width:920px}
+  @media (max-width:940px){.main{padding:26px 20px 80px}}
+  .ch{display:none}
+  .ch.on{display:block}
+
+  .eyebrow{font-size:12px;letter-spacing:.14em;color:var(--accent);font-weight:600;margin-bottom:10px}
+  .ch h1{margin:0 0 8px;font-size:clamp(28px,4.4vw,38px);letter-spacing:-.025em;line-height:1.15;text-wrap:balance}
+  .ch .intro{color:var(--muted);font-size:16.5px;margin:0 0 30px;max-width:62ch}
+  .ch h3{margin:34px 0 12px;font-size:18px;letter-spacing:-.01em}
+  .ch h3:first-of-type{margin-top:26px}
+  .ch p{margin:0 0 14px}
+
+  /* ── 블록 ── */
+  .box{background:var(--surface);border:1px solid var(--line);border-radius:13px;padding:18px 20px;margin:14px 0;box-shadow:var(--shadow)}
+  .box h4{margin:0 0 10px;font-size:14.5px}
+  .box ul{margin:0;padding-left:19px}
+  .box li{margin:5px 0}
+  .box.warn{border-left:3px solid var(--bad)} .box.warn h4{color:var(--bad)}
+  .box.info{border-left:3px solid var(--navy)} .box.info h4{color:var(--navy)}
+  .box.good{border-left:3px solid var(--ok)} .box.good h4{color:var(--ok)}
+
+  .say{
+    background:var(--accent-soft);border:1px solid var(--accent);border-radius:12px;
+    padding:16px 20px;margin:14px 0;
+  }
+  .say .tag{font-size:11px;letter-spacing:.13em;color:var(--accent);text-transform:uppercase;font-weight:600;display:block;margin-bottom:7px}
+  .say q{font-size:19px;font-weight:600;display:block;line-height:1.5;quotes:'“' '”'}
+  .say .sub{font-size:13.5px;color:var(--muted);margin-top:8px}
+
+  .steps{counter-reset:s;display:flex;flex-direction:column;gap:9px;margin:16px 0}
+  .steps li{list-style:none;display:flex;gap:13px;align-items:flex-start;
+            background:var(--surface);border:1px solid var(--line);border-radius:11px;padding:13px 16px}
+  .steps li::before{counter-increment:s;content:counter(s);flex:none;width:24px;height:24px;border-radius:7px;
+    background:var(--navy);color:#fff;display:grid;place-items:center;font-size:12.5px;font-weight:700;margin-top:1px}
+  .steps li b{display:block}
+  .steps li .d{font-size:13.5px;color:var(--muted)}
+  ol.steps{padding:0;margin:16px 0}
+
+  .flow{display:flex;flex-direction:column;align-items:stretch;gap:0;margin:20px 0}
+  .node{border-radius:11px;padding:14px 18px;text-align:center;border:1px solid var(--line);background:var(--surface)}
+  .node.head{background:var(--navy);border-color:var(--navy);color:#fff;font-weight:700}
+  .node.q{border:2px solid var(--navy);font-weight:600}
+  .node .d{font-size:13px;color:var(--muted);font-weight:400;margin-top:4px}
+  .node.head .d{color:rgba(255,255,255,.75)}
+  .arrow{align-self:center;color:var(--muted);font-size:13px;padding:7px 0}
+  .split{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:6px 0}
+  @media (max-width:640px){.split{grid-template-columns:1fr}}
+  .lane{display:flex;flex-direction:column;gap:0}
+  .lane .top{border-radius:10px;padding:9px 14px;text-align:center;font-weight:700;font-size:14px;color:#fff}
+  .lane.yes .top{background:var(--ok)} .lane.no .top{background:var(--bad)} .lane.neutral .top{background:var(--navy)}
+  .lane .body{background:var(--raised);border:1px solid var(--line);border-radius:10px;padding:13px 15px;font-size:14.5px}
+  .lane .body .d{font-size:13px;color:var(--muted);margin-top:5px}
+
+  .kv{display:grid;grid-template-columns:auto 1fr;gap:8px 16px;margin:14px 0;font-size:15px}
+  .kv dt{color:var(--muted);font-size:13.5px}
+  .kv dd{margin:0}
+
+  .key{background:var(--raised);border:1px solid var(--line);border-radius:6px;padding:1px 7px;
+       font-family:"IBM Plex Mono",monospace;font-size:13px}
+
+  .video{background:#000;border:1px solid var(--line);border-radius:13px;overflow:hidden;margin:18px 0}
+  .video .ratio{position:relative;width:100%;padding-top:56.25%}
+  .video iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+  .video .fallback{padding:16px 18px;background:var(--surface);font-size:13.5px;color:var(--muted);border-top:1px solid var(--line)}
+  .poster{
+    position:absolute;inset:0;width:100%;height:100%;border:0;border-radius:0;
+    background:linear-gradient(150deg,#16233A 0%,#0D1219 62%,#20180C 100%);
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;cursor:pointer
+  }
+  .poster:hover .pbtn{transform:scale(1.06)}
+  .pbtn{
+    width:74px;height:74px;border-radius:50%;background:var(--accent);
+    display:grid;place-items:center;transition:transform .15s;flex:none
+  }
+  .pbtn::after{content:"";border-style:solid;border-width:13px 0 13px 21px;
+    border-color:transparent transparent transparent var(--accent-ink);margin-left:5px}
+  .ptitle{color:#E7EDF5;font-size:16px;font-weight:600;text-align:center;padding:0 24px}
+  .phint{color:#8D9BAD;font-size:12.5px}
+
+  a.btn{display:inline-block;text-decoration:none;border:1px solid var(--line);border-radius:9px;white-space:nowrap}
+  a.btn.primary{border-color:var(--accent);color:var(--accent-ink)}
+  a.btn.primary:hover{filter:brightness(1.08)}
+  .trybox{
+    display:flex;align-items:center;gap:18px;flex-wrap:wrap;justify-content:space-between;
+    background:var(--surface);border:1px solid var(--accent);border-radius:13px;
+    padding:18px 20px;margin:18px 0;box-shadow:var(--shadow)
+  }
+  .trybox b{font-size:15px}
+  .trybox .d{font-size:13.5px;color:var(--muted);margin-top:3px}
+
+  .calc{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:20px;margin:18px 0;box-shadow:var(--shadow)}
+  .calc .grid{display:flex;gap:14px;flex-wrap:wrap;align-items:flex-end}
+  .calc label{display:flex;flex-direction:column;gap:5px;font-size:12.5px;color:var(--muted)}
+  .calc input{width:130px;padding:9px 11px;background:var(--raised);color:var(--ink);border:1px solid var(--line);
+              border-radius:9px;font-family:"IBM Plex Mono",monospace;font-size:15px}
+  .calc input:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+  .toggle{display:flex;gap:6px}
+  .toggle button{padding:9px 14px;font-size:13.5px;color:var(--muted)}
+  .toggle button[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink);font-weight:600}
+  .out{margin-top:18px;padding:16px 18px;background:var(--accent-soft);border:1px solid var(--accent);border-radius:11px}
+  .out .big{font-size:26px;font-weight:700;color:var(--accent)}
+  .out .exp{font-size:13.5px;color:var(--muted);margin-top:6px}
+
+  table.t{width:100%;border-collapse:collapse;margin:16px 0;font-size:14.5px}
+  .scroll{overflow-x:auto}
+  table.t th,table.t td{border:1px solid var(--line);padding:10px 13px;text-align:left;vertical-align:top}
+  table.t th{background:var(--navy);color:#fff;font-weight:600;font-size:13.5px}
+  table.t tr:nth-child(even) td{background:var(--raised)}
+
+  .pager{display:flex;justify-content:space-between;gap:12px;margin-top:44px;padding-top:22px;border-top:1px solid var(--line)}
+  .pager .lbl{font-size:12px;color:var(--muted);display:block}
+  .pager button{padding:12px 18px;text-align:left;max-width:46%}
+  .pager button.r{text-align:right}
+  @media (prefers-reduced-motion: reduce){*{transition:none!important}}
+</style>
+
+</head>
+<body>
+<!-- ══════════ 표지 ══════════ -->
+<section id="cover">
+  <div class="crest"><i></i>GTA FIVEM · 시그널 서버 경찰청</div>
+  <h1>훈련생 교육과정</h1>
+  <p class="sub">교육영상에서 다룬 내용을 순서대로 따라가며 배우는 과정입니다.
+     장비 사용 조건부터 유치장 처리, 도주 대응, 출석 · 수배 · 영장 RP까지 실제 진행 순서 그대로 정리했습니다.</p>
+  <div class="path">
+    <span class="st on">훈련생 교육</span><span class="ar">→</span>
+    <span class="st">실무 참여</span><span class="ar">→</span>
+    <span class="st">순경 진급평가</span>
+  </div>
+  <div class="byline">제작 · <b>부기</b></div>
+  <div style="display:flex;gap:10px;flex-wrap:wrap">
+    <button class="btn primary" id="start">교육 시작</button>
+    <button class="btn ghost" id="jump-flow">순서도만 보기</button>
+  </div>
+  <p style="font-size:13px;color:var(--muted);margin:0">
+    화면 공유로 함께 볼 때 좌우 방향키로 챕터를 넘길 수 있습니다.
+  </p>
+</section>
+
+<!-- ══════════ 본문 ══════════ -->
+<div id="app">
+  <nav class="rail">
+    <h2>교육 목차</h2>
+    <div class="toc" id="toc"></div>
+    <button class="btn ghost home" id="home">표지로 돌아가기</button>
+  </nav>
+
+  <main class="main" id="main">
+
+  <!-- 0 ─────────────────────────────── -->
+  <section class="ch on" data-t="오리엔테이션 · 교육영상">
+    <div class="eyebrow"></div>
+    <h1>먼저 교육영상을 봅니다</h1>
+    <p class="intro">아래 영상이 이 교육의 원본 자료입니다. 영상을 함께 본 뒤, 다음 챕터부터 장면별로 다시 짚어갑니다.</p>
+
+    <div class="video">
+      <div class="ratio" id="vwrap">
+        <button class="poster" id="vplay" aria-label="교육영상 재생">
+          <span class="pbtn" aria-hidden="true"></span>
+          <span class="ptitle">RWPD 훈련생 기초교육 영상자료</span>
+          <span class="phint" id="vhint">클릭해서 재생</span>
+        </button>
+      </div>
+      <div class="fallback">
+        <a href="https://www.youtube.com/watch?v=PRc73tHsCgI" target="_blank" rel="noopener">유튜브에서 바로 열기</a>
+      </div>
+    </div>
+
+    <h3>영상 목차</h3>
+    <ol class="steps">
+      <li><span><b>경찰무기 사용법</b><span class="d">테이저건과 총기의 사용 조건은 완전히 다릅니다.</span></span></li>
+      <li><span><b>사건처리 절차 안내</b><span class="d">구금 유무에 따라 처리 장소와 절차가 갈립니다.</span></span></li>
+      <li><span><b>모의상황 — 구금이 있는 범죄</b><span class="d">불법무기 소지죄 사건처리 전 과정.</span></span></li>
+      <li><span><b>모의상황 — 구금이 없는 범죄</b><span class="d">도로교통법 상황, 현장 종결.</span></span></li>
+      <li><span><b>모의상황 — 일반범죄에서 중대범죄 전환</b><span class="d">도주 RP 전환과 발포 시점.</span></span></li>
+      <li><span><b>경찰 권한 기능 안내</b><span class="d">F1 호출로 인력·견인 지원 요청.</span></span></li>
+    </ol>
+
+    <div class="box info">
+      <h4>이 교육의 목표</h4>
+      <p style="margin:0">외워서 읊는 것이 목적이 아닙니다. <b>왜 이 순서인지</b>를 알면 상황이 바뀌어도 대응할 수 있습니다.
+         모든 챕터는 “무엇을 확인하고 → 무엇을 말하고 → 무엇을 누르는가” 세 가지로 정리되어 있습니다.</p>
+    </div>
+  </section>
+
+  <!-- 1 ─────────────────────────────── -->
+  <section class="ch" data-t="사건처리 7원칙">
+    <div class="eyebrow"></div>
+    <h1>사건처리 절차 안내</h1>
+    <p class="intro">개별 절차에 들어가기 전, 모든 사건에 공통으로 적용되는 일곱 가지 원칙입니다. 이후 모든 챕터가 이 원칙 위에서 돌아갑니다.</p>
+
+    <ol class="steps">
+      <li><span><b>구금이 있는 범죄는 유치장 입감 처리절차를 밟아야 한다</b><span class="d">현장에서 처리할 수 없습니다.</span></span></li>
+      <li><span><b>구금이 없는 일반범죄 · 도로교통법은 현장에서 벌금 처리한다</b><span class="d">체포하지 않습니다.</span></span></li>
+      <li><span><b>유치장에 입감되면 불법아이템 압수는 필수로 진행한다</b></span></li>
+      <li><span><b>스토리RP는 현장에서 처리하고 다른 범죄 죄목을 묻지 않는다</b><span class="d">영장 RP는 예외입니다.</span></span></li>
+      <li><span><b>관련 범죄사실에 대한 증거는 필수다</b><span class="d">경관 바디캠 또는 신고자의 영상.</span></span></li>
+      <li><span><b>범죄사실 신고 시 공소시효는 24시간이다</b><span class="d">기억RP 규칙 참고 필수.</span></span></li>
+      <li><span><b>신고된 범죄 · 체포하지 못한 범죄는 출석 RP로 처리한다</b><span class="d">도주자 추적 실패 등.</span></span></li>
+    </ol>
+
+    <div class="box warn">
+      <h4>증거 없이 할 수 있는 일은 없다</h4>
+      <ul>
+        <li>증거가 없거나 24시간이 지난 사건은 처리 대상이 아닙니다.</li>
+        <li>출석 RP 또한 영상이 필수입니다.</li>
+        <li>한 번에 부과할 수 있는 범죄는 시스템상 <b>최대 4개</b>입니다.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 2 ─────────────────────────────── -->
+  <section class="ch" data-t="최초 판단 — 어느 절차로">
+    <div class="eyebrow"></div>
+    <h1>최초 판단 — 어느 절차로 갈 것인가</h1>
+    <p class="intro">현장에서는 먼저 범죄사실과 증거를 확인한 뒤, 구금이 있는 범죄인지 확인합니다. 구금 여부에 따라 이후 처리 절차가 완전히 달라집니다.</p>
+
+    <div class="flow">
+      <div class="node head">범죄 사실 확인</div>
+      <div class="arrow">▼</div>
+      <div class="node q">영상이 확보되어 있는가?
+        <div class="d">경관 바디캠 · 신고자 영상 · 제3자의 영상 중 하나는 반드시 있어야 합니다.</div>
+      </div>
+      <div class="arrow">▼ 영상이 있음</div>
+      <div class="node q">구금이 있는 범죄인가?
+        <div class="d">구금 여부에 따라 체포 여부, 장비 사용, 사건 처리 장소가 달라집니다.</div>
+      </div>
+    </div>
+
+    <div class="split">
+      <div class="lane neutral">
+        <div class="top">구금이 있다</div>
+        <div class="arrow">▼</div>
+        <div class="body"><b>체포 후 유치장으로 인도</b>
+          <div class="d">수갑 → 미란다 고지 → 차량 탑승 → 유치장 인도 → 인정여부 3회 → 압수 → 벌금(보석금) → 석방</div>
+        </div>
+      </div>
+      <div class="lane neutral">
+        <div class="top">구금이 없다</div>
+        <div class="arrow">▼</div>
+        <div class="body"><b>체포하지 않고 현장에서 벌금 부과</b>
+          <div class="d">사이렌 → PM(3회) → 정차 → 인정여부 확인 → 현장 벌금 부과. 수갑 · 미란다 · 유치장 인도 절차가 없습니다.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="box warn">
+      <h4>증거 없이 할 수 있는 일은 없다</h4>
+      <ul>
+        <li>인정여부는 <b>최대 3회</b>까지 확인합니다.</li>
+        <li>영상이 확보됨을 알려 범죄사실을 인정하도록 합니다.</li>
+        <li>3회 거부 시 스태프콜 — 그 이후로는 대응하지 않습니다.</li>
+      </ul>
+    </div>
+    <div class="box info">
+      <h4>함께 기억할 원칙</h4>
+      <ul>
+        <li>범죄사실 신고 시 공소시효는 <b>24시간</b>입니다.</li>
+        <li>스토리RP는 현장에서 처리하고 다른 죄목을 묻지 않습니다. (영장 RP 제외)</li>
+        <li>한 번에 부과할 수 있는 범죄는 최대 4개입니다.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 3 ─────────────────────────────── -->
+  <section class="ch" data-t="경찰장비 사용 판단">
+    <div class="eyebrow"></div>
+    <h1>경찰장비 사용 판단</h1>
+    <p class="intro">테이저건과 총기는 사용 조건이 완전히 다릅니다. 여기서 실수하면 곧바로 감점 대상이 됩니다.</p>
+
+    <div class="split">
+      <div class="lane neutral">
+        <div class="top">테이저건</div>
+        <div class="arrow">▼</div>
+        <div class="body"><b>발포조건 없이 사용 가능</b>
+          <div class="d">사용 자체에 사전 절차가 없습니다. 다만 <b>불분명한 사유로 사용하면 권력남용에 저촉</b>되니 주의합니다.</div>
+        </div>
+      </div>
+      <div class="lane neutral">
+        <div class="top">총기 (경찰무기)</div>
+        <div class="arrow">▼</div>
+        <div class="body"><b>사용에 요건이 있다</b>
+          <div class="d">“구금이 있는 범죄 사실을 확인하였을 때”만 사용할 수 있습니다.</div>
+        </div>
+      </div>
+    </div>
+
+    <h3>총기를 사용하려는 경우</h3>
+    <div class="flow">
+      <div class="node q">구금이 있는 범죄 사실을 확인하였는가?</div>
+    </div>
+    <div class="split">
+      <div class="lane no">
+        <div class="top">아니오</div>
+        <div class="arrow">▼</div>
+        <div class="body"><b>총기를 사용할 수 없다</b>
+          <div class="d">확인되지 않은 상태에서 발포하면 절차 위반입니다. 테이저건으로 대응하거나 사용 조건이 갖추어질 때까지 대기합니다.</div>
+        </div>
+      </div>
+      <div class="lane yes">
+        <div class="top">예 — 요건 충족</div>
+        <div class="arrow">▼</div>
+        <div class="body"><b>발포 전 절차를 밟는다</b>
+          <div class="d">공포탄 고지 → 허공/바닥 3발 → 그 이후 사격</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="say">
+      <span class="tag">구두 고지</span>
+      <q>공포탄 발포 하겠습니다</q>
+      <div class="sub">고지 후 허공 혹은 바닥에 3번 발포하고, 그 이후에 대상자에게 사격할 수 있습니다.</div>
+    </div>
+
+    <div class="box warn">
+      <h4>주의</h4>
+      <ul>
+        <li>공포탄은 「허공, 혹은 바닥」에 3번 발포합니다.</li>
+        <li>공포탄 발포 이전에 구두고지가 필수입니다.</li>
+        <li>사격 · 제압 이후에는 구금이 있는 범죄 사건처리를 진행합니다.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 4 ─────────────────────────────── -->
+  <section class="ch" data-t="구금 있는 범죄 ① 현장 → 입감">
+    <div class="eyebrow"></div>
+    <h1>구금이 있는 범죄 ① 현장 대응 → 입감</h1>
+    <p class="intro">모의상황 — 대상자가 보호구역 밖에서 총을 발포한 뒤, 경찰이 출동하자 보호구역(RP 금지구역) 안으로 도주한 상황입니다.</p>
+
+    <div class="flow">
+      <div class="node head">구금이 있는 범죄 사실 확인</div>
+      <div class="arrow">▼</div>
+      <div class="node q">대상자가 보호구역 안에 있는가?
+        <div class="d">서버에서 지정한 보호구역에서는 체포 등 RP 행위를 진행할 수 없습니다.</div>
+      </div>
+    </div>
+
+    <div class="split">
+      <div class="lane yes">
+        <div class="top">보호구역 안</div>
+        <div class="arrow">▼</div>
+        <div class="body"><b>구두로 불러내고 대기</b>
+          <div class="d">고유번호와 닉네임을 지칭해 나오도록 요청합니다. 3회 지시 이후에도 이탈하지 않으면 스태프콜.</div>
+        </div>
+      </div>
+      <div class="lane neutral">
+        <div class="top">보호구역 밖 / 이탈함</div>
+        <div class="arrow">▼</div>
+        <div class="body"><b>체포 절차 시작</b>
+          <div class="d">수갑 채우기 → 미란다 고지</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="say">
+      <span class="tag">구두 고지 · 보호구역</span>
+      <q>OO번 OOO님, 보호구역에서 나와주시기 바랍니다</q>
+      <div class="sub">고유번호와 닉네임을 불러 대상자를 특정합니다. “차 좀 빼주세요” 같은 대화를 통한 유도 행위도 가능합니다.</div>
+    </div>
+
+    <h3>체포 절차</h3>
+    <ol class="steps">
+      <li><span><b>상호작용 — 수갑 채우기</b></span></li>
+      <li><span><b>상호작용 — 미란다 고지</b><span class="d">체포 사유나 “체포하겠습니다” 구두 고지는 필요 없습니다.</span></span></li>
+      <li><span><b>차량에 태워 유치장으로 인도</b></span></li>
+      <li><span><b>상호작용 — 차량에서 내리기</b></span></li>
+      <li><span><b>수갑을 채운 채로 「끌고가기」로 유치장 입감</b></span></li>
+    </ol>
+
+    <div class="box warn">
+      <h4>모든 상호작용은 구두 고지할 의무가 없다</h4>
+      <p style="margin:0">체포 단계의 상호작용은 구두 고지 의무가 없습니다. 다만 <b>즉시 구금 상호작용은 사용 금지</b>입니다.</p>
+    </div>
+    <div class="box info">
+      <h4>경관은 같이 들어간다</h4>
+      <p style="margin:0">이후 인정여부 확인 · 압수 · 벌금 부과가 모두 유치장 안에서 진행되어야 하기 때문입니다.</p>
+    </div>
+  </section>
+
+  <!-- 5 ─────────────────────────────── -->
+  <section class="ch" data-t="구금 있는 범죄 ② 유치장 → 석방">
+    <div class="eyebrow"></div>
+    <h1>구금이 있는 범죄 ② 유치장 처리 → 석방</h1>
+    <p class="intro">구금이 있는 범죄는 반드시 유치장에서 사건처리를 진행합니다. 다섯 단계를 순서대로 밟습니다.</p>
+
+    <ol class="steps">
+      <li><span><b>해당 범죄 사실 인정여부 3회 확인</b><span class="d">상대방의 영상을 확인할 필요는 없습니다. 담당 경관 혹은 신고받은 영상으로 범죄사실을 입증합니다.</span></span></li>
+      <li><span><b>불법아이템 압수</b><span class="d">모든 물품 압수. 유치장 사건처리 과정에서 반드시 진행합니다.</span></span></li>
+      <li><span><b>벌금 · 구금시간 구두고지</b></span></li>
+      <li><span><b>보석금 사용여부 확인</b><span class="d">질의 여부는 경관의 재량입니다.</span></span></li>
+      <li><span><b>최종 벌금 부과 처리 → 석방</b></span></li>
+    </ol>
+
+    <div class="say">
+      <span class="tag">구두 고지 · 인정여부</span>
+      <q>~죄에 대해 인정 하십니까?</q>
+      <div class="sub">최대 3회까지 질문합니다. 이때 범죄사실을 확인할 수 있는 영상이 확보되어 있다는 사실을 알려 인정여부를 확인합니다.</div>
+    </div>
+
+    <div class="split">
+      <div class="lane no">
+        <div class="top">3회 불인정</div>
+        <div class="arrow">▼</div>
+        <div class="body"><b>F1 스태프콜 — “RP거부”로 신고</b>
+          <div class="d">서버 규칙으로 처벌이 가능합니다. 이때 범죄사실이 확인된 영상이 반드시 구비되어야 합니다.</div>
+        </div>
+      </div>
+      <div class="lane yes">
+        <div class="top">인정함</div>
+        <div class="arrow">▼</div>
+        <div class="body"><b>불법아이템 압수 진행</b>
+          <div class="d">다른 범죄로 입감된 대상자라도 압수 과정에서 불법무기가 발견되면 <b>소지죄가 추가</b>됩니다.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="say">
+      <span class="tag">구두 고지 · 벌금과 구금</span>
+      <q>벌금 1500만원에 구금 15분 입니다.</q>
+      <div class="sub">불법무기 소지죄 기준 예시입니다. 이어서 보석금 사용 여부를 묻습니다.</div>
+    </div>
+    <div class="say">
+      <span class="tag">구두 고지 · 보석금</span>
+      <q>보석금 사용하시나요?</q>
+      <div class="sub">사용한다면 → “구금 15분이셔서, 보석금 1500만원 입니다.”</div>
+    </div>
+
+    <h3>석방 절차</h3>
+    <ol class="steps">
+      <li><span><b>총 금액을 부과한 후 석방처리</b></span></li>
+      <li><span><b>상호작용 — 끌고 가기</b></span></li>
+      <li><span><b>경찰청 사유지 밖으로 인도하여 수갑 해제 · 석방</b></span></li>
+    </ol>
+    <div class="box info">
+      <h4>참고</h4>
+      <p style="margin:0">경관은 범죄자를 차로 데려다줄 의무가 없습니다.</p>
+    </div>
+  </section>
+
+  <!-- 6 ─────────────────────────────── -->
+  <section class="ch" data-t="보석금 · 구금시간 계산">
+    <div class="eyebrow"></div>
+    <h1>보석금 · 구금시간 계산</h1>
+    <p class="intro">계산할 때 기억할 공식은 단 하나입니다.</p>
+
+    <div class="flow">
+      <div class="node head">구금시간 1분 = 100만원</div>
+    </div>
+
+    <div class="split">
+      <div class="lane yes">
+        <div class="top">보석금을 사용한다</div>
+        <div class="arrow">▼</div>
+        <div class="body"><b>구금 1분당 100만원으로 환산해 벌금에 더한다</b>
+          <div class="d">구금은 진행하지 않습니다.<br>예 · 불법무기 소지죄 — 벌금 1,500만원 + 구금 15분(=1,500만원) = <b>총 3,000만원</b></div>
+        </div>
+      </div>
+      <div class="lane no">
+        <div class="top">사용하지 않는다</div>
+        <div class="arrow">▼</div>
+        <div class="body"><b>벌금만 부과하고 해당 구금시간으로 구금</b>
+          <div class="d">보유금액이 부족하면 미납액을 구금으로 환산합니다.<br>기존 구금시간 + 미납 100만원당 1분</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="box warn">
+      <h4>최대 구금시간은 120분</h4>
+      <p style="margin:0">계산 결과가 120분을 넘어도 최대 구금은 120분까지입니다.</p>
+    </div>
+
+    <h3>직접 계산해 보기</h3>
+    <div class="calc">
+      <div class="grid">
+        <label>벌금 (만원)<input type="number" id="c-fine" value="1500" min="0" step="100"></label>
+        <label>구금 (분)<input type="number" id="c-min" value="15" min="0" step="1"></label>
+        <label>낼 수 있는 금액 (만원)<input type="number" id="c-have" value="0" min="0" step="100"></label>
+        <div>
+          <div style="font-size:12.5px;color:var(--muted);margin-bottom:5px">보석금</div>
+          <div class="toggle">
+            <button id="c-yes" aria-pressed="false">사용</button>
+            <button id="c-no" aria-pressed="true">미사용</button>
+          </div>
+        </div>
+      </div>
+      <div class="out">
+        <div class="big mono" id="c-out">—</div>
+        <div class="exp" id="c-exp"></div>
+      </div>
+    </div>
+
+    <div class="scroll">
+      <table class="t">
+        <tr><th>상황</th><th>계산</th><th>결과</th></tr>
+        <tr><td>벌금 1,500만원 · 구금 15분 · 보석금 사용</td><td>1,500 + (15분 × 100만원)</td><td>총 3,000만원 부과, 구금 없음</td></tr>
+        <tr><td>벌금 1,500만원 · 구금 15분 · 한 푼도 못 냄</td><td>15분 + (1,500만원 ÷ 100만원)</td><td>구금 30분</td></tr>
+        <tr><td>벌금 1,500만원 중 1,000만원만 결제</td><td>15분 + (500만원 ÷ 100만원)</td><td>구금 20분</td></tr>
+      </table>
+    </div>
+
+    <div class="box warn">
+      <h4>벌금 부과 시 주의사항</h4>
+      <ul>
+        <li>최대 <b>4개</b>의 범죄만 부과할 수 있습니다.</li>
+        <li>5개 이상 범죄사실이 확인될 때는 <b>벌금 · 구금시간이 높은 순</b>으로 4개를 만듭니다.</li>
+        <li>벌금 부과 UI에서는 금액만 동일하게 선택하여 부과해도 문제 없습니다.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 7 ─────────────────────────────── -->
+  <section class="ch" data-t="구금 없는 범죄 — 도로교통법">
+    <div class="eyebrow"></div>
+    <h1>구금이 없는 범죄 — 도로교통법</h1>
+    <p class="intro">구금이 없는 범죄는 대상자를 체포하지 않고 현장에서 사건처리를 끝냅니다.</p>
+
+    <ol class="steps">
+      <li><span><b>즉각 사이렌 작동</b><span class="d"><span class="key">Ctrl + Q</span></span></span></li>
+      <li><span><b>PM (정차 명령) 실시</b><span class="d"><span class="key">Ctrl + E</span></span></span></li>
+      <li><span><b>대상 차량의 앞 혹은 뒤에 정차</b></span></li>
+      <li><span><b>하차 고지 후 먼저 하차 대기</b></span></li>
+      <li><span><b>차량 시동 끄기 · 문 잠금</b><span class="d">공무차량 탈취를 막기 위한 필수 절차입니다.</span></span></li>
+      <li><span><b>해당 범죄 사실 인정여부 확인</b><span class="d">3회 질의 거부 시 스태프콜.</span></span></li>
+      <li><span><b>체포하지 않고 바로 벌금 부과 → 현장에서 종결</b></span></li>
+    </ol>
+
+    <div class="say">
+      <span class="tag">구두 고지 · 정차</span>
+      <q>갓길에 정차하세요.</q>
+    </div>
+    <div class="say">
+      <span class="tag">구두 고지 · 하차</span>
+      <q>하차하세요.</q>
+      <div class="sub">고지 후 상대방이 하차할 때까지 대기합니다.</div>
+    </div>
+
+    <div class="split">
+      <div class="lane no">
+        <div class="top">정차하지 않음</div>
+        <div class="arrow">▼</div>
+        <div class="body"><b>PM이 3회 누적되면 도주 범죄사실이 추가된다</b>
+          <div class="d">이때부터 경관은 발포가 가능합니다. → 도주 RP로 전환</div>
+        </div>
+      </div>
+      <div class="lane yes">
+        <div class="top">정차함</div>
+        <div class="arrow">▼</div>
+        <div class="body"><b>하차 → 시동 끄기 · 문 잠금 → 인정여부 확인 → 현장 벌금</b></div>
+      </div>
+    </div>
+
+    <div class="box warn">
+      <h4>구금이 있는 범죄와 비교</h4>
+      <ul>
+        <li>수갑 / 미란다 고지 → <b>없음</b></li>
+        <li>유치장 인도 → <b>없음</b></li>
+        <li>불법아이템 압수 → <b>없음</b></li>
+        <li>보석금 질의 → <b>해당 없음</b></li>
+      </ul>
+      <p style="margin:8px 0 0">“인정여부 확인 + 현장 벌금 부과” 두 가지뿐입니다.</p>
+    </div>
+  </section>
+
+  <!-- 8 ─────────────────────────────── -->
+  <section class="ch" data-t="도주 RP 전환">
+    <div class="eyebrow"></div>
+    <h1>일반범죄 → 중대범죄 전환 (도주 RP)</h1>
+    <p class="intro">총기 발포가 가능해지는 시점을 정확하게 알아야 합니다. 평가에서 가장 자주 틀리는 부분입니다.</p>
+
+    <div class="flow">
+      <div class="node head">교통법 위반 확인 → 사이렌 작동 (Ctrl + Q)</div>
+      <div class="arrow">▼</div>
+      <div class="node">PM (정차 명령) 수행 — Ctrl + E</div>
+      <div class="arrow">▼</div>
+      <div class="node q">PM이 3회 누적되었는가?</div>
+    </div>
+
+    <div class="split">
+      <div class="lane no">
+        <div class="top">3회 미만</div>
+        <div class="arrow">▼</div>
+        <div class="body"><b>아직 발포할 수 없다</b>
+          <div class="d">도주 범죄사실이 추가되기 전이므로 총기 사용 요건이 충족되지 않았습니다. 3회가 누적될 때까지 PM을 계속 수행합니다.</div>
+        </div>
+      </div>
+      <div class="lane yes">
+        <div class="top">3회 누적</div>
+        <div class="arrow">▼</div>
+        <div class="body"><b>두 가지가 동시에 발생</b>
+          <div class="d">① 도주 범죄사실 추가 ② 이때부터 경관은 발포 가능 → 대상자를 향해 발포</div>
+        </div>
+      </div>
+    </div>
+
+    <h3>제압 이후</h3>
+    <ol class="steps">
+      <li><span><b>제압 완료 → 차량 시동 끔 · 문 잠금</b></span></li>
+      <li><span><b>상호작용 — 수갑 채우기</b></span></li>
+      <li><span><b>상호작용 — 미란다 고지</b><span class="d">도주는 법률상 구금이 있는 범죄이므로 체포 절차를 밟습니다.</span></span></li>
+      <li><span><b>용의자 차량은 F1로 정비소 호출 후 유치장으로 이동</b></span></li>
+    </ol>
+
+    <div class="say">
+      <span class="tag">F1 정비소 호출 요청 내용</span>
+      <q>범죄 차량 견인 부탁드립니다</q>
+      <div class="sub">“범죄자 차량 인도”로 요청합니다.</div>
+    </div>
+
+    <div class="box warn">
+      <h4>동승자도 동일하게 처벌된다</h4>
+      <p style="margin:0">도주RP는 동승자 처벌법이 존재합니다. 같이 탑승한 동승자도 동일하게 처벌됩니다.</p>
+    </div>
+    <div class="box info">
+      <h4>왜 발포가 가능해지는가</h4>
+      <ul>
+        <li>총기는 “구금이 있는 범죄”를 확인했을 때만 사용할 수 있다</li>
+        <li>도주는 법률상 구금이 있는 범죄다</li>
+        <li>PM 3회 누적으로 도주 범죄사실이 추가되면, 그 시점에 요건이 충족된다</li>
+      </ul>
+      <p style="margin:8px 0 0">→ 따라서 <b>PM 3회 누적 이전에는 발포할 수 없습니다.</b></p>
+    </div>
+  </section>
+
+  <!-- 10 ─────────────────────────────── -->
+  <section class="ch" data-t="출석 RP">
+    <div class="eyebrow"></div>
+    <h1>출석 RP</h1>
+    <p class="intro">현장에서 붙잡지 못한 범죄를 사후에 처리하는 절차입니다. 이 절차에서 불응하면 수배 RP로 넘어갑니다.</p>
+
+    <div class="box info">
+      <h4>출석 가능 사유 — 다음 중 하나에 해당하면 출석 요구가 가능하다</h4>
+      <ul>
+        <li>용의자 추적 중 용의자가 도주한 경우</li>
+        <li>범죄에 대해 신고를 받은 경우</li>
+        <li>채팅으로 은어를 사용하지 않고 총기 구매 및 판매, 도박 대상자 모집, 기타 범죄 행위 모집, 경찰에 대한 비하발언을 한 경우</li>
+      </ul>
+    </div>
+
+    <div class="flow">
+      <div class="node q">증거가 있고, 공소시효 24시간 이내인가?
+        <div class="d">담당 경관의 바디캠 · 신고자가 제공한 영상 · 채팅의 캡처본 등</div>
+      </div>
+    </div>
+    <div class="split">
+      <div class="lane no">
+        <div class="top">아니오</div>
+        <div class="arrow">▼</div>
+        <div class="body"><b>출석 요구를 할 수 없다</b><div class="d">증거가 없거나 24시간이 지난 사건은 처리 대상이 아닙니다.</div></div>
+      </div>
+      <div class="lane yes">
+        <div class="top">예</div>
+        <div class="arrow">▼</div>
+        <div class="body"><b>RP 채팅에 출석요구 공지</b><div class="d">현재 시간 기준으로 5분의 출석시간을 주고, 총 3회 올립니다.</div></div>
+      </div>
+    </div>
+
+    <div class="say">
+      <span class="tag">출석요구 양식 · 5분 내 3회</span>
+      <q>[고유번호][닉네임]님은 [시간]까지 경찰청으로 출석해주시기 바랍니다. [1/3]</q>
+      <div class="sub">[2/3], [3/3]까지 동일한 문구로 세 번 올립니다. 시간은 세 번 모두 같아야 합니다.</div>
+    </div>
+
+    <div class="trybox">
+      <div>
+        <b>직접 해보기</b>
+        <div class="d">공표 도구에서 마감 시각을 고정하고 [1/3][2/3][3/3] 문구를 복사해 봅니다.</div>
+      </div>
+      <a class="btn primary" href="https://momo0516.github.io/signal-police/" target="_blank" rel="noopener">출석 시뮬레이션 해보기</a>
+    </div>
+
+    <div class="split">
+      <div class="lane yes">
+        <div class="top">출석함 · 출석 의사 있음</div>
+        <div class="arrow">▼</div>
+        <div class="body"><b>해당 범죄의 법규에 따라 처리</b></div>
+      </div>
+      <div class="lane no">
+        <div class="top">거부 · 불응</div>
+        <div class="arrow">▼</div>
+        <div class="body"><b>수배 RP로 전환</b><div class="d">예시 “안가요” / 5분이 지나도 응답이 없는 경우도 불응으로 봅니다.</div></div>
+      </div>
+    </div>
+
+    <div class="box warn">
+      <h4>출석 RP 필수 조건</h4>
+      <ul>
+        <li>증거 필수 — 없으면 출석 요구 자체가 불가</li>
+        <li>공소시효 24시간 이내에만 가능</li>
+        <li>공지는 5분 내 총 3회, [1/3][2/3][3/3] 표기</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 11 ─────────────────────────────── -->
+  <section class="ch" data-t="수배 RP">
+    <div class="eyebrow"></div>
+    <h1>수배 RP</h1>
+    <p class="intro">출석을 거부하거나 불응한 경우 수배 RP로 전환합니다. 수배는 40분간 진행하며, 수배자가 사유지에 있을 경우 영장 RP로 전환합니다.</p>
+
+    <ol class="steps">
+      <li><span><b>무전으로 경찰청에 출근인원 집결 요청</b><span class="d">수배RP 참여 인원을 먼저 모읍니다.</span></span></li>
+      <li><span><b>수배 전환 공표 — RP 채팅 1회</b></span></li>
+      <li><span><b>공개수배 공표 — RP 채팅 2회</b></span></li>
+      <li><span><b>수배목록 등록</b><span class="d">대상자의 고유번호 또는 닉네임을 입력해 수배등록 후 위치를 확인합니다.</span></span></li>
+    </ol>
+
+    <div class="say">
+      <span class="tag">수배 전환 공표 · 1회</span>
+      <q>[고유번호][닉네임]님 출석거부로 확인 되어 수배 RP로 전환됩니다.</q>
+    </div>
+    <div class="say">
+      <span class="tag">공개수배 공표 · 2회</span>
+      <q>[닉네임][고유번호] 현시간부로 00시 00분까지 공개수배가 진행됨을 알려드립니다. 시민분들의 협조 부탁드리겠습니다.</q>
+      <div class="sub">공표 시각 기준으로 40분간 진행합니다.</div>
+    </div>
+
+    <div class="split">
+      <div class="lane no">
+        <div class="top">사유지에 없음</div>
+        <div class="arrow">▼</div>
+        <div class="body"><b>추격 후 수배 RP 진행 (40분간)</b></div>
+      </div>
+      <div class="lane yes">
+        <div class="top">사유지에 있음</div>
+        <div class="arrow">▼</div>
+        <div class="body"><b>영장 RP로 전환된다</b><div class="d">사유지 안에서는 수배RP를 그대로 진행할 수 없습니다.</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 12 ─────────────────────────────── -->
+  <section class="ch" data-t="영장 RP">
+    <div class="eyebrow"></div>
+    <h1>영장 RP</h1>
+    <p class="intro">수배자가 사유지로 확인된 경우 영장으로 전환합니다. 불응과 순응 여부에 따라 진행방향이 갈립니다.</p>
+
+    <ol class="steps">
+      <li><span><b>영장RP 전환 공표</b><span class="d">“수배자 위치가 사유지로 확인되어 영장RP로 전환됩니다.”</span></span></li>
+      <li><span><b>해당 팩션에 대한 영장 코멘트 1차 · 2차 입력</b></span></li>
+      <li><span><b>경찰 메인홀 영장 발급 NPC에게 영장 발급</b><span class="d">수배 대상자의 고유번호 또는 닉네임을 입력합니다.</span></span></li>
+      <li><span><b>상대방의 사유지로 이동 후 3차 코멘트 입력</b></span></li>
+      <li><span><b>대표자가 나오면 영장을 보여준 뒤 순응 / 불응을 물어본다</b></span></li>
+    </ol>
+
+    <div class="say">
+      <span class="tag">영장 코멘트 · 칠성파 기준 예시</span>
+      <q>1차 현시간부로 칠성 저택에 대한 영장이 발부되었습니다.</q>
+      <div class="sub">2차 — 현시간부로 칠성 저택에 대한 영장발부가 확정됨을 알려드립니다.<br>3차 — 조직원 한분은 입구로 나와서 영장을 받아주시기 바랍니다.</div>
+    </div>
+
+    <div class="split">
+      <div class="lane yes">
+        <div class="top">순응</div>
+        <div class="arrow">▼</div>
+        <div class="body"><b>대상자 체포 → 경찰서로 이동해 법규대로 진행 → 유치장에서 처리</b></div>
+      </div>
+      <div class="lane no">
+        <div class="top">불응</div>
+        <div class="arrow">▼</div>
+        <div class="body"><b>준비 시간을 주고 경찰청으로 복귀</b>
+          <div class="d">조직은 사유지에서 준비하고, 경찰측은 경찰청 앞에 모입니다.</div>
+        </div>
+      </div>
+    </div>
+
+    <h3>불응 · 준비시간 경과 후</h3>
+    <ol class="steps">
+      <li><span><b>사유지로 이동한 다음 사유지 진입경로 파악</b><span class="d">드론 등을 이용해 인원과 배치를 확인합니다.</span></span></li>
+      <li><span><b>사유지 영장RP 시작 공표 — RP 채팅에 두 번 입력</b></span></li>
+      <li><span><b>전멸전 시작</b></span></li>
+    </ol>
+
+    <div class="say">
+      <span class="tag">전력진압 공표 · 2회 입력</span>
+      <q>현시간부로 칠성 저택에 대한 전력진압 (00시 00분)까지 실시하겠습니다. 칠성파 저택 주변 반경 1km 내 접근을 통제하며, 접근 시 공범으로 간주하여 발포합니다.</q>
+      <div class="sub">진압 시간은 현재 시각 기준 40분입니다.</div>
+    </div>
+
+    <div class="box info">
+      <h4>공표 문구는 도구로 자동 생성할 수 있습니다</h4>
+      <p style="margin:0">조직 · 기업별 영장 문구와 시간 계산은 별도의 「경찰 RP 공표 도구」에서 버튼 하나로 복사할 수 있습니다.
+         출석 5분, 수배 40분, 진압 40분이 자동으로 계산됩니다.</p>
+    </div>
+  </section>
+
+  <!-- 13 ─────────────────────────────── -->
+  <section class="ch" data-t="자주 나오는 실수 · 감점 요소">
+    <div class="eyebrow"></div>
+    <h1>자주 나오는 실수 · 감점 요소</h1>
+    <p class="intro">실무와 진급평가에서 반복적으로 지적되는 부분입니다. 이것만 피해도 안정적인 진행이 됩니다.</p>
+
+    <div class="box warn">
+      <h4>절차 관련</h4>
+      <ul>
+        <li>절차 순서 틀림 / 필수 절차 누락 — 미란다 고지, 인정 여부 확인, 소지품 검사, RP 전환 및 공표 절차 등</li>
+        <li><b>즉시 구금 상호작용 사용</b> — 규칙 위반입니다</li>
+        <li>PM 3회 누적 전에 발포</li>
+        <li>공포탄 고지 없이 발포 / 공포탄 3발을 생략</li>
+        <li>구금이 있는 범죄를 현장에서 처리</li>
+        <li>보호구역 안에서 체포 등 RP 행위 진행</li>
+      </ul>
+    </div>
+
+    <div class="box warn">
+      <h4>태도 관련</h4>
+      <ul>
+        <li>RP 몰입을 방해하는 태도, 불필요한 장난 · 메타 발언</li>
+        <li>평가 중 “이제 뭐 하면 되나요?” 같은 확인성 발언 — 평가에 불리하게 작용합니다</li>
+        <li>흐름을 끝까지 책임지지 않고 중간에 끊는 진행</li>
+        <li>기타 스태프건으로 넘어갈 수 있는 행위</li>
+      </ul>
+    </div>
+
+    <div class="box good">
+      <h4>평가에서 더 중요하게 보는 것</h4>
+      <ul>
+        <li>완벽함보다 <b>안정적인 진행</b></li>
+        <li>단순 실수보다 <b>이후 대처와 흐름 유지</b></li>
+        <li>구두 고지를 명확하고 자연스럽게 전달하는가</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 14 ─────────────────────────────── -->
+  <section class="ch" data-t="다음 단계 — 순경 진급평가">
+    <div class="eyebrow"></div>
+    <h1>다음 단계 — 순경 진급평가</h1>
+    <p class="intro">훈련생 교육 → 실무 참여 → 순경 진급평가 순으로 진행됩니다. 마지막 단계의 기준을 미리 확인하세요.</p>
+
+    <dl class="kv">
+      <dt>응시 조건</dt><dd>의무 훈련생기간 <b>5일</b> 이후 응시 가능</dd>
+      <dt>합격 기준</dt><dd>총 <b>19점 중 11점 이상</b> + 평가관 소견 + 행정팀장/부팀장 결재</dd>
+      <dt>불합격 시</dt><dd>훈련생 기간 <b>이틀 연장</b></dd>
+      <dt>출제 범위</dt><dd>교육에서 안내된 내용에 한함</dd>
+    </dl>
+
+    <div class="box info">
+      <h4>평가 방식</h4>
+      <ul>
+        <li>실제 필드 RP와 동일한 흐름으로 진행되며, 응시자는 경관 역할로 참여합니다.</li>
+        <li>평가관이 범죄자 및 상황 트리거 역할을 맡아 모의 상황을 연출합니다.</li>
+        <li>상황은 사전 공지 없이 순차적으로 전개되며, 종료 시까지 몇 가지 흐름으로 이어집니다.</li>
+        <li>전체 평가 종료 이후 감점 부분에 대한 재교육이 이루어집니다.</li>
+      </ul>
+    </div>
+
+    <div class="box">
+      <h4>평가 항목</h4>
+      <ul>
+        <li><b>절차 숙지 및 수행</b> — PM 사용 및 정차 유도 / 수갑 → 미란다 고지 → 차량 탑승 / 유치장 절차(인정 3회 · 압수 · 벌금·보석금 고지) / 구금 · 보석금 · 벌금 처리의 정확성 / 즉시 구금 상호작용 금지 등 필수 규칙 준수</li>
+        <li><b>RP 표현력</b> — 구두 고지를 명확하고 자연스럽게 전달하는가 <i>(배점 비중 낮음)</i></li>
+        <li><b>위기 상황 대응</b> — 도주 단계별 대응, PM 횟수와 교전 전환 조건, 출석 → 수배 → 영장 흐름 숙지</li>
+        <li><b>태도 및 협업</b> — 끝까지 책임지고 진행하는가, 소통 태도가 적절한가</li>
+      </ul>
+    </div>
+
+    <div class="box good">
+      <h4>교육은 여기까지입니다</h4>
+      <p style="margin:0">이제 실무에 참여하며 절차를 몸에 익히고, 5일 후 진급평가에 응시하세요.</p>
+    </div>
+  </section>
+
+  <div class="pager">
+    <button class="btn ghost" id="prev"><span class="lbl">이전</span><span id="prevT">—</span></button>
+    <button class="btn ghost r" id="next"><span class="lbl">다음</span><span id="nextT">—</span></button>
+  </div>
+  </main>
+</div>
+
+<script>
+(function(){
+  var chapters = Array.prototype.slice.call(document.querySelectorAll('.ch'));
+  var toc = document.getElementById('toc');
+  var cur = 0;
+
+  function pad2(n){ return (n < 10 ? '0' : '') + n; }
+
+  chapters.forEach(function(sec, i){
+    var eb = sec.querySelector('.eyebrow');
+    if (eb) eb.textContent = 'CHAPTER ' + pad2(i + 1);
+
+    var b = document.createElement('button');
+    var n = document.createElement('span'); n.className = 'n'; n.textContent = (i + 1 < 10 ? '0' : '') + (i + 1);
+    var t = document.createElement('span'); t.textContent = sec.dataset.t;
+    b.appendChild(n); b.appendChild(t);
+    b.addEventListener('click', function(){ go(i); });
+    toc.appendChild(b);
+  });
+  var tocBtns = toc.querySelectorAll('button');
+
+  function go(i){
+    if (i < 0 || i >= chapters.length) return;
+    cur = i;
+    chapters.forEach(function(s, k){ s.classList.toggle('on', k === i); });
+    for (var k = 0; k < tocBtns.length; k++) tocBtns[k].classList.toggle('on', k === i);
+    var prev = document.getElementById('prev'), next = document.getElementById('next');
+    prev.disabled = i === 0;
+    next.disabled = i === chapters.length - 1;
+    document.getElementById('prevT').textContent = i > 0 ? chapters[i - 1].dataset.t : '—';
+    document.getElementById('nextT').textContent = i < chapters.length - 1 ? chapters[i + 1].dataset.t : '—';
+    document.getElementById('main').scrollIntoView({ block: 'start' });
+    window.scrollTo(0, 0);
+  }
+
+  function open(i){
+    document.getElementById('cover').classList.add('off');
+    document.getElementById('app').classList.add('on');
+    go(i);
+  }
+
+  document.getElementById('start').addEventListener('click', function(){ open(0); });
+  document.getElementById('jump-flow').addEventListener('click', function(){ open(2); });
+  document.getElementById('home').addEventListener('click', function(){
+    document.getElementById('app').classList.remove('on');
+    document.getElementById('cover').classList.remove('off');
+    window.scrollTo(0, 0);
+  });
+  document.getElementById('prev').addEventListener('click', function(){ go(cur - 1); });
+  document.getElementById('next').addEventListener('click', function(){ go(cur + 1); });
+
+  document.addEventListener('keydown', function(e){
+    if (!document.getElementById('app').classList.contains('on')) return;
+    var tag = (e.target.tagName || '').toLowerCase();
+    if (tag === 'input' || tag === 'textarea') return;
+    if (e.key === 'ArrowRight') go(cur + 1);
+    if (e.key === 'ArrowLeft') go(cur - 1);
+  });
+
+  /* ── 교육영상 ──
+     유튜브는 임베드한 페이지의 주소를 확인할 수 없으면 "동영상 플레이어 구성 오류(153)"를 냅니다.
+     로컬 파일(file://)로 열거나 주소가 없는 샌드박스 안에서 열 때가 그렇습니다.
+     그래서 http/https로 열렸을 때만 플레이어를 넣고, 아니면 유튜브를 새 탭으로 엽니다. */
+  var VID = 'PRc73tHsCgI';
+  var vplay = document.getElementById('vplay');
+  if (vplay){
+    var proto = window.location.protocol;
+    var embeddable = (proto === 'http:' || proto === 'https:');
+    if (!embeddable){
+      document.getElementById('vhint').textContent = '클릭하면 유튜브에서 열립니다';
+    }
+    vplay.addEventListener('click', function(){
+      if (!embeddable){
+        window.open('https://www.youtube.com/watch?v=' + VID, '_blank', 'noopener');
+        return;
+      }
+      var f = document.createElement('iframe');
+      f.src = 'https://www.youtube-nocookie.com/embed/' + VID + '?autoplay=1&rel=0';
+      f.title = '시그널 서버 경찰 교육영상';
+      f.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
+      f.setAttribute('allowfullscreen', '');
+      document.getElementById('vwrap').appendChild(f);
+      vplay.remove();
+    });
+  }
+
+  /* ── 보석금 계산기 ── */
+  var useBail = false;
+  var fine = document.getElementById('c-fine');
+  var mins = document.getElementById('c-min');
+  var have = document.getElementById('c-have');
+  var out  = document.getElementById('c-out');
+  var exp  = document.getElementById('c-exp');
+  var yes  = document.getElementById('c-yes');
+  var no   = document.getElementById('c-no');
+
+  function num(el){ var v = parseInt(el.value, 10); return isNaN(v) || v < 0 ? 0 : v; }
+
+  function calc(){
+    var f = num(fine), m = num(mins), h = num(have);
+    yes.setAttribute('aria-pressed', useBail ? 'true' : 'false');
+    no.setAttribute('aria-pressed', useBail ? 'false' : 'true');
+
+    if (useBail){
+      var bail = m * 100;
+      out.textContent = '총 ' + (f + bail).toLocaleString() + '만원 부과 · 구금 없음';
+      exp.textContent = '벌금 ' + f.toLocaleString() + '만원 + 보석금 ' + bail.toLocaleString()
+        + '만원(구금 ' + m + '분 × 100만원). 보석금을 냈으므로 구금은 진행하지 않습니다.';
+    } else {
+      var unpaid = Math.max(0, f - h);
+      var add = Math.floor(unpaid / 100);
+      var total = m + add;
+      var capped = Math.min(120, total);
+      out.textContent = '벌금 ' + Math.min(f, h).toLocaleString() + '만원 납부 · 구금 ' + capped + '분';
+      exp.textContent = '기존 구금 ' + m + '분' + (add > 0
+        ? ' + 미납 ' + unpaid.toLocaleString() + '만원 ÷ 100만원 = ' + add + '분 → 합계 ' + total + '분'
+        : ' (미납액 없음)')
+        + (total > 120 ? ' — 최대 구금시간 120분을 넘으므로 120분으로 처리합니다.' : '');
+    }
+  }
+
+  if (fine){
+    [fine, mins, have].forEach(function(el){ el.addEventListener('input', calc); });
+    yes.addEventListener('click', function(){ useBail = true; calc(); });
+    no.addEventListener('click', function(){ useBail = false; calc(); });
+    calc();
+  }
+})();
+</script>
+</body>
+</html>
