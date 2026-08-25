@@ -66,6 +66,7 @@
   .path .st.on{background:var(--accent);border-color:var(--accent);color:var(--accent-ink);font-weight:600}
   .path .ar{color:var(--muted)}
   .byline{font-size:13.5px;color:var(--muted)}
+  .byline.top{margin-top:-14px;font-size:17px}
   .byline b{color:var(--ink);font-weight:600}
 
   /* ── 레이아웃 ── */
@@ -211,6 +212,7 @@
 <section id="cover">
   <div class="crest"><i></i>GTA FIVEM · 시그널 서버 경찰청</div>
   <h1>훈련생 교육과정</h1>
+  <div class="byline top">제작 · <b>부기</b></div>
   <p class="sub">교육영상에서 다룬 내용을 순서대로 따라가며 배우는 과정입니다.
      장비 사용 조건부터 유치장 처리, 도주 대응, 출석 · 수배 · 영장 RP까지 실제 진행 순서 그대로 정리했습니다.</p>
   <div class="path">
@@ -218,7 +220,6 @@
     <span class="st">실무 참여</span><span class="ar">→</span>
     <span class="st">순경 진급평가</span>
   </div>
-  <div class="byline">제작 · <b>부기</b></div>
   <div style="display:flex;gap:10px;flex-wrap:wrap">
     <button class="btn primary" id="start">교육 시작</button>
     <button class="btn ghost" id="jump-flow">순서도만 보기</button>
@@ -600,6 +601,116 @@
     </div>
   </section>
 
+  <!-- 법률 ─────────────────────────────── -->
+  <section class="ch" data-t="죄목별 벌금 · 구금표">
+    <div class="eyebrow"></div>
+    <h1>죄목별 벌금 · 구금표</h1>
+    <p class="intro">부과할 죄목과 금액은 전부 여기서 나옵니다. <b>구금 칸이 비어 있으면 구금이 없는 범죄</b>라 현장에서 벌금만 부과해 종결하고,
+       구금이 적혀 있으면 체포해 유치장에서 처리합니다.</p>
+
+    <div class="box info">
+      <h4>표를 읽는 법</h4>
+      <ul>
+        <li>구금 <b>없음</b> → 사이렌 · PM · 인정여부 확인 · 현장 벌금 부과로 종결</li>
+        <li>구금 <b>있음</b> → 수갑 · 미란다 · 유치장 인도 · 인정여부 3회 · 압수 · 벌금/보석금</li>
+        <li>보석금은 구금 1분 = 100만원으로 환산해 벌금에 더합니다.</li>
+        <li>한 번에 부과할 수 있는 범죄는 최대 4개, 5개 이상이면 벌금 · 구금이 높은 순으로 4개를 만듭니다.</li>
+      </ul>
+    </div>
+
+    <h3>도로교통법 <span style="font-weight:400;color:var(--muted);font-size:14px">— 구금 없음</span></h3>
+    <div class="scroll">
+      <table class="t">
+        <tr><th style="width:46%">죄목</th><th style="width:16%">구금</th><th style="width:20%">벌금</th><th>비고</th></tr>
+        <tr><td>소음공해</td><td>—</td><td class="mono">300만원</td><td></td></tr>
+        <tr><td>무단횡단</td><td>—</td><td class="mono">300만원</td><td></td></tr>
+        <tr><td>주정차위반</td><td>—</td><td class="mono">300만원</td><td></td></tr>
+        <tr><td>무면허운전</td><td>—</td><td class="mono">500만원</td><td></td></tr>
+        <tr><td>속도위반</td><td>—</td><td class="mono">500만원</td><td>일반도로 150 KM/H · 고속도로 200 KM/H</td></tr>
+        <tr><td>신호위반</td><td>—</td><td class="mono">500만원</td><td></td></tr>
+        <tr><td>차선위반</td><td>—</td><td class="mono">500만원</td><td></td></tr>
+        <tr><td>진로방해</td><td>—</td><td class="mono">500만원</td><td></td></tr>
+        <tr><td>역주행</td><td>—</td><td class="mono">500만원</td><td></td></tr>
+      </table>
+    </div>
+
+    <h3>일반범죄 <span style="font-weight:400;color:var(--muted);font-size:14px">— 구금 없음</span></h3>
+    <div class="scroll">
+      <table class="t">
+        <tr><th style="width:46%">죄목</th><th style="width:16%">구금</th><th style="width:20%">벌금</th><th>비고</th></tr>
+        <tr><td>사칭</td><td>—</td><td class="mono">700만원</td><td>타인의 자격 · 직권을 사칭해 불공정한 이득을 취한 경우</td></tr>
+        <tr><td>업무방해죄</td><td>—</td><td class="mono">800만원</td><td>위력(강압적)으로 타인의 업무를 방해</td></tr>
+        <tr><td>공갈협박</td><td>—</td><td class="mono">800만원</td><td>타인을 공갈해 재산상 이익을 취득</td></tr>
+        <tr><td>명예훼손</td><td>—</td><td class="mono">800만원</td><td>말과 행동으로 타인의 인격을 욕되게 함</td></tr>
+        <tr><td>모욕</td><td>—</td><td class="mono">800만원</td><td>공연하게 사람을 모욕</td></tr>
+        <tr><td>미허가 비행</td><td>—</td><td class="mono">1,000만원</td><td></td></tr>
+        <tr><td>저공비행</td><td>—</td><td class="mono">1,000만원</td><td></td></tr>
+        <tr><td>공연음란</td><td>—</td><td class="mono">1,000만원</td><td>공공연하게 음란한 행위</td></tr>
+      </table>
+    </div>
+
+    <h3>중대범죄 <span style="font-weight:400;color:var(--muted);font-size:14px">— 구금 있음 · 유치장 처리</span></h3>
+    <div class="scroll">
+      <table class="t">
+        <tr><th style="width:36%">죄목</th><th style="width:14%">구금</th><th style="width:18%">벌금</th><th>비고</th></tr>
+        <tr><td>재물손괴</td><td class="mono">10분</td><td class="mono">1,000만원</td><td>타인의 재물을 해함</td></tr>
+        <tr><td>폭행죄</td><td class="mono">10분</td><td class="mono">1,000만원</td><td>사람의 신체에 폭행을 가함</td></tr>
+        <tr><td>도주</td><td class="mono">10분</td><td class="mono">1,500만원</td><td>PM 명령에 따른 정지 · 정차 및 사유지에서 3회 이상 이탈 명령에 불응</td></tr>
+        <tr><td>성희롱</td><td class="mono">10분</td><td class="mono">1,500만원</td><td>성과 관련된 언동으로 굴욕감을 줌</td></tr>
+        <tr><td>도박개장</td><td class="mono">15분</td><td class="mono">1,500만원</td><td>금액 + 룰렛/가위바위보처럼 명확히 기재한 건만 저촉. 은어(100콩, ㄹㄹ 등)는 해당 없음</td></tr>
+        <tr><td>차량절도</td><td class="mono">15분</td><td class="mono">1,500만원</td><td>타인의 차량을 절도</td></tr>
+        <tr><td>과실치상죄</td><td class="mono">15분</td><td class="mono">1,500만원</td><td>상해 의지 없이 타인을 상해</td></tr>
+        <tr><td>과실치사죄</td><td class="mono">20분</td><td class="mono">3,000만원</td><td>상해 의지 없이 타인을 살해</td></tr>
+      </table>
+    </div>
+
+    <h3>특수범죄 <span style="font-weight:400;color:var(--muted);font-size:14px">— 구금 있음</span></h3>
+    <div class="scroll">
+      <table class="t">
+        <tr><th style="width:36%">죄목</th><th style="width:14%">구금</th><th style="width:18%">벌금</th><th>비고</th></tr>
+        <tr><td>불법무기 소지 및 광고</td><td class="mono">15분</td><td class="mono">1,500만원</td><td rowspan="3">총포 · 도검류 단속법</td></tr>
+        <tr><td>불법무기 판매 및 구매</td><td class="mono">15분</td><td class="mono">2,000만원</td></tr>
+        <tr><td>불법장물 소지 및 광고</td><td class="mono">15분</td><td class="mono">1,500만원</td></tr>
+        <tr><td>마약류 소지죄</td><td class="mono">15분</td><td class="mono">1,500만원</td><td>마약 · 향정신성의약품 · 대마를 적정하게 취급하지 않은 경우 <b>(현재 서버 미도입)</b></td></tr>
+        <tr><td>마약류 판매</td><td class="mono">15분</td><td class="mono">2,000만원</td><td><b>(현재 서버 미도입)</b></td></tr>
+        <tr><td>납치 및 유괴</td><td class="mono">20분</td><td class="mono">2,000만원</td><td>동의 없이 무력으로 약취 · 유인</td></tr>
+        <tr><td>살인</td><td class="mono">30분</td><td class="mono">4,000만원</td><td>고의로 사람을 살해</td></tr>
+      </table>
+    </div>
+
+    <div class="box warn">
+      <h4>총포 · 도검류 단속법 적용 기준</h4>
+      <ul>
+        <li>근접무기(야구배트, 골프채)는 단순 소지만으로는 불법이 아니나, <b>위해 또는 위협을 가하면</b> 단속법에 따라 처벌합니다.</li>
+        <li><b>칼 · 마체테 · 도끼는 들고만 있어도</b> 처벌 가능합니다.</li>
+        <li>총기 · 장물 · 블랙머니 등 불법 물품의 채팅 · 광고 행위도 처벌 대상입니다.</li>
+        <li>은어 사용 예 — 총기 → 물총 · 장난감총 / 블랙머니 → 화이트머니 / 장물 → 도자기 · 티비 · 금 시계</li>
+      </ul>
+    </div>
+
+    <h3>공무원 관련법 <span style="font-weight:400;color:var(--muted);font-size:14px">— 구금 있음</span></h3>
+    <div class="scroll">
+      <table class="t">
+        <tr><th style="width:36%">죄목</th><th style="width:14%">구금</th><th style="width:18%">벌금</th><th>비고</th></tr>
+        <tr><td>공무원 명예훼손</td><td class="mono">10분</td><td class="mono">1,500만원</td><td>공무원을 대상으로 한 모욕적 발언</td></tr>
+        <tr><td>공무원 사칭</td><td class="mono">10분</td><td class="mono">1,500만원</td><td>경찰이 아님에도 과속단속 · 탐문 등 경찰 업무를 진행</td></tr>
+        <tr><td>공무집행 방해죄</td><td class="mono">10분</td><td class="mono">1,500만원</td><td>공무 집행 중인 공무원에 대한 폭행 · 협박 또는 공무 비협조</td></tr>
+        <tr><td>공무원 폭행</td><td class="mono">15분</td><td class="mono">2,000만원</td><td>공무집행방해로 공무원에게 상해를 입힌 경우</td></tr>
+        <tr><td>공무원 살인</td><td class="mono">30분</td><td class="mono">5,000만원</td><td>공무집행방해로 공무원을 사망에 이르게 한 경우</td></tr>
+        <tr><td>공무원 뇌물공여 &amp; 수수</td><td class="mono">30분</td><td class="mono">5,000만원</td><td>직무와 관련해 금품을 받거나 요구 · 약속</td></tr>
+      </table>
+    </div>
+
+    <div class="box good">
+      <h4>계산 예시</h4>
+      <ul>
+        <li>차량절도(15분 · 1,500만원) + 공무원 폭행(15분 · 2,000만원) → 벌금 3,500만원 · 구금 30분</li>
+        <li>보석금 사용 시 → 3,500 + (30분 × 100만원) = <b>총 6,500만원</b>, 구금 없음</li>
+        <li>미사용에 소지금 2,000만원뿐이면 → 미납 1,500만원 ÷ 100 = 15분 추가 → <b>구금 45분</b></li>
+      </ul>
+    </div>
+  </section>
+
   <!-- 7 ─────────────────────────────── -->
   <section class="ch" data-t="구금 없는 범죄 — 도로교통법">
     <div class="eyebrow"></div>
@@ -689,7 +800,9 @@
       <li><span><b>제압 완료 → 차량 시동 끔 · 문 잠금</b></span></li>
       <li><span><b>상호작용 — 수갑 채우기</b></span></li>
       <li><span><b>상호작용 — 미란다 고지</b><span class="d">도주는 법률상 구금이 있는 범죄이므로 체포 절차를 밟습니다.</span></span></li>
-      <li><span><b>용의자 차량은 F1로 정비소 호출 후 유치장으로 이동</b></span></li>
+      <li><span><b>경찰차에 태운다</b><span class="d">좌석이 부족하면 F1 경찰 호출로 차량 지원을 요청합니다.</span></span></li>
+      <li><span><b>F1 정비소 호출로 용의자 차량 견인 요청</b><span class="d">요청 내용은 “범죄자 차량 인도”.</span></span></li>
+      <li><span><b>유치장으로 이동</b></span></li>
     </ol>
 
     <div class="say">
